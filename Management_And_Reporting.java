@@ -83,7 +83,7 @@ public class Management_And_Reporting  {
     public ResultSet animallPopulationReport() throws IOException, SQLException {
 
         Connection con = DriverManager.getConnection("jdbc:oracle:thin:@prophet.njit.edu:1521:course",
-                "abs83", "Brutekiller231!");
+                "abs83", "Password");
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
