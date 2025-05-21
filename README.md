@@ -1,12 +1,12 @@
-Zoo Management System
+🐘 Zoo Management System 🦒
 This is a console-based Java application designed to manage various aspects of a zoo's operations. It provides functionalities for managing animal assets, daily activities like attraction entries and concession sales, and generating various management and financial reports.
 
 The project was originally developed using an Oracle database, but for ease of setup and portability on GitHub, it is highly recommended to configure it with a lightweight, embedded database like H2 Database. An Oracle XE setup is also possible if preferred and disk space allows.
 
-Features
+✨ Features
 The application is structured into three main menus, accessible from a central ZooMenu:
 
-1. Asset Management
+1. 🐾 Asset Management
 Insert/View/Update Animals: Manage details about animals, including species, building, and enclosure information.
 
 Insert/View/Update Buildings: Handle information about the physical buildings within the zoo.
@@ -15,14 +15,14 @@ Insert/View/Update Animal Shows: Manage details of animal shows, including prici
 
 Insert/View/Update Employees: Maintain employee records, including job types and hourly rates.
 
-2. Daily Zoo Activity
+2. 🗓️ Daily Zoo Activity
 Attraction Entry: Record entries into attractions and calculate revenue.
 
 Insert Concession: Log concession sales and associated revenue.
 
 Insert Attendee: Record attendee information and ticket sales.
 
-3. Management and Reporting
+3. 📊 Management and Reporting
 Revenue Report by Source: Generate reports on revenue based on different sources (attractions, concessions, admissions).
 
 Animal Population Report: View reports related to animal populations and associated costs.
@@ -33,18 +33,18 @@ Best Days in Month: Determine the days with the highest revenue within a specifi
 
 Average Attraction Attendance and Concession: Analyze average attendance and concession revenue.
 
-Technologies Used
+🛠️ Technologies Used
 Core Language: Java
 
 Database Connectivity: JDBC (Java Database Connectivity)
 
-Build Tool: Assumed to be Maven (instructions provided for Maven)
+Build Tool: Maven
 
 Database (Recommended for Local Setup): H2 Database (embedded mode)
 
 Database (Original / Alternative): Oracle Database
 
-Project Structure
+📂 Project Structure
 The project is organized into several Java classes, each handling specific functionalities:
 
 ZooMenu.java: The main entry point of the application, providing the top-level menu.
@@ -67,18 +67,20 @@ IDAlreadyExistsException.java: Custom exception for handling cases where an ID a
 
 IDDoesntExistException.java: Custom exception for handling cases where an ID does not exist.
 
-Setup Instructions
+🚀 Setup Instructions
 Prerequisites
 Java Development Kit (JDK) 8 or higher
 
 Maven (if you don't have it, you can download it or use your IDE's built-in Maven support)
+
+Git (for cloning the repository)
 
 Database Setup (Choose ONE of the following options)
 Option 1: H2 Database (Recommended for Ease of Use and Portability)
 This option requires minimal setup and disk space, as H2 runs as an embedded database within your application.
 
 Add H2 Dependency:
-If using Maven, add the following to your pom.xml file within the <dependencies> section:
+Ensure your pom.xml file (see example below) includes the H2 dependency within the <dependencies> section:
 
 <dependency>
     <groupId>com.h2database</groupId>
@@ -103,11 +105,11 @@ Create a sql directory (e.g., src/main/resources/sql/) in your project.
 
 Inside this directory, create:
 
-schema.sql: Contains CREATE TABLE statements for all your tables (e.g., ANIMAL, BUILDING, ANIMALSHOW, EMPLOYEE, SPECIES, ENCLOSURE, HOURLYRATE, REVENUETYPES, REVENUE_EVENTS, CONCESSION, ZOOADMISSIONS, CARES_FOR). You might need to adjust Oracle-specific syntax (e.g., VARCHAR2 to VARCHAR, date functions).
+schema.sql: Contains CREATE TABLE statements for all your tables (e.g., ANIMAL, BUILDING, ANIMALSHOW, EMPLOYEE, SPECIES, ENCLOSURE, HOURLYRATE, REVENUETYPES, REVENUE_EVENTS, CONCESSION, ZOOADMISSIONS, CARES_FOR). You might need to adjust Oracle-specific syntax (e.g., VARCHAR2 to VARCHAR, date functions, TO_DATE).
 
 data.sql (Optional): Contains INSERT statements for any initial data you want to populate your tables with.
 
-Implement Schema Initialization: In your Java code (e.g., in ZooMenu or a dedicated DatabaseInitializer class), add logic to run these schema.sql and data.sql scripts when the application starts for the first time (e.g., check if a table exists, if not, run the schema script).
+Implement Schema Initialization: In your Java code (e.g., in ZooMenu or a dedicated DatabaseInitializer class), add logic to run these schema.sql and data.sql scripts when the application starts for the first time (e.g., check if a table exists, if not, run the schema script). This makes the project truly plug-and-play.
 
 Option 2: Oracle Database Express Edition (XE) - Local Installation
 This option requires installing Oracle XE on your machine. Ensure you have sufficient disk space.
@@ -147,10 +149,51 @@ Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
 
 Ensure Class.forName("oracle.jdbc.OracleDriver"); is present.
 
-Secure Your Credentials (Important for GitHub!)
+🔒 Secure Your Credentials (Important for GitHub!)
 NEVER hardcode your database username and password directly in your Java files or commit them to GitHub.
 
-Create a config.properties file: In your project's root directory, create a file named config.properties.
+Create a .gitignore file: In your project's root directory, create a file named .gitignore (if you don't have one) and add the following lines to it:
+
+# Maven
+/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Eclipse
+.classpath
+.project
+.settings/
+.idea/
+*.iml
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code
+.vscode/
+
+# OS generated files
+.DS_Store
+.Trashes
+Thumbs.db
+
+# Database files (H2 embedded)
+/data/*.mv.db
+/data/*.trace.db
+
+# Configuration files (containing sensitive info)
+config.properties
+
+Create a config.properties file: In your project's root directory, create a file named config.properties. This file will NOT be committed to GitHub due to the .gitignore rule.
 
 db.url=jdbc:h2:./data/zoo_db
 db.username=sa
@@ -158,44 +201,49 @@ db.password=
 
 (Or for Oracle XE: db.url=jdbc:oracle:thin:@localhost:1521/xe, db.username=abs83, db.password=YourChosenPassword)
 
-Add config.properties to .gitignore: Create or edit the .gitignore file in your project's root and add config.properties to it. This prevents it from being pushed to GitHub.
-
 Modify Java Code to Read Properties: Update your Asset_Management, Daily_Zoo_Activity, and Management_And_Reporting classes to read connection details from this config.properties file.
 
 import java.io.InputStream;
 import java.util.Properties;
-// ... other imports
+import java.io.IOException; // Add this import
 
 public class Asset_Management {
     private Properties props = new Properties();
 
     public Asset_Management() {
         try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            // If running from IDE, config.properties might be in project root, not classpath
             if (input == null) {
-                System.out.println("Sorry, unable to find config.properties");
-                return;
+                try (InputStream fileInput = new java.io.FileInputStream("config.properties")) {
+                    props.load(fileInput);
+                }
+            } else {
+                props.load(input);
             }
-            props.load(input);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            System.err.println("Error loading config.properties: " + ex.getMessage());
+            // Handle error, e.g., exit or use default values
         }
     }
 
-    public ResultSet getAnimalView() throws SQLException {
-        // Use props.getProperty("db.url"), props.getProperty("db.username"), props.getProperty("db.password")
-        Connection con = DriverManager.getConnection(
+    public Connection getConnection() throws SQLException { // Added a helper method for connection
+        return DriverManager.getConnection(
             props.getProperty("db.url"),
             props.getProperty("db.username"),
             props.getProperty("db.password")
         );
+    }
+
+    public ResultSet getAnimalView() throws SQLException {
+        Connection con = getConnection(); // Use the helper method
         // ... rest of your method
     }
     // Apply this pattern to all methods that establish a connection
 }
 
-Note: You might need to adjust the path to config.properties if it's not directly in your resources folder.
+Note: The getClass().getClassLoader().getResourceAsStream("config.properties") path assumes config.properties is in your src/main/resources folder (which it should be for Maven projects). The added FileInputStream fallback is for when running directly from the project root in an IDE.
 
-How to Run the Application
+🏃 How to Run the Application
 Clone the Repository:
 
 git clone https://github.com/your-username/your-repo-name.git
@@ -213,14 +261,14 @@ java -cp target/your-project-name-1.0-SNAPSHOT.jar ZooMenu
 
 The application will launch in your console, presenting the main menu.
 
-Custom Exceptions
+🚨 Custom Exceptions
 The project includes custom exception classes for better error handling:
 
 IDAlreadyExistsException: Thrown when an attempt is made to insert a record with an ID that already exists.
 
 IDDoesntExistException: Thrown when an operation is attempted on a record with an ID that does not exist.
 
-Future Enhancements
+💡 Future Enhancements
 Graphical User Interface (GUI): Implement a GUI (e.g., with Swing, JavaFX, or a web framework) for a more user-friendly experience.
 
 Improved Input Validation: Add more robust input validation to prevent NumberFormatException and other issues.
