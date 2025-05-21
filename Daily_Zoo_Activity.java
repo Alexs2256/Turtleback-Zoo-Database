@@ -42,7 +42,7 @@ public class Daily_Zoo_Activity {
             try {
                 Class.forName("oracle.jdbc.OracleDriver");
                 con = DriverManager.getConnection("jdbc:oracle:thin:@prophet.njit.edu:1521:course",
-                        "abs83", "Brutekiller231!");
+                        "abs83", "Password");
 
                 st = con.createStatement();
                 br = new BufferedReader(new InputStreamReader(System.in));
